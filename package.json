@@ -18,7 +18,8 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "predeploy": "yarn build",
-        "deploy": "firebase deploy"
+        "deploy": "firebase deploy",
+        "deploy:hosting": "yarn predeploy && firebase deploy --only hosting"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -30,6 +31,7 @@
         "not op_mini all"
     ],
     "devDependencies": {
+        "firebase": "^5.9.2",
         "utility-types": "^3.4.1"
     }
 }
