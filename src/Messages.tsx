@@ -54,13 +54,7 @@ export function Messages( { channel }: MessagesProps )
 }
 
 
-interface MessageWithAvatarProps
-{
-	message: message
-}
-
-
-function MessageWithAvatar( { message: { body } }: MessageWithAvatarProps )
+function MessageWithAvatar( { message: { body } }: { message: message } )
 {
 	
 	return (
@@ -79,13 +73,7 @@ function MessageWithAvatar( { message: { body } }: MessageWithAvatarProps )
 }
 
 
-export interface MessageWithoutAvatarProps
-{
-	message: message
-}
-
-
-export function MessageWithoutAvatar( { message: { body } }: MessageWithoutAvatarProps )
+export function MessageWithoutAvatar( { message: { body } }: { message: message } )
 {
 	
 	return (
