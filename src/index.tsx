@@ -3,7 +3,21 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import firebase, { firestore } from "firebase"
 
+
+
+
+firebase.initializeApp( {
+	apiKey:            "AIzaSyA6knUASvHehbo1hNQmWTFmG2WlszEROTg",
+	authDomain:        "reach-slack.firebaseapp.com",
+	databaseURL:       "https://reach-slack.firebaseio.com",
+	projectId:         "reach-slack",
+	storageBucket:     "reach-slack.appspot.com",
+	messagingSenderId: "451211342052",
+} );
+
+export const db = firestore()
 
 
 
