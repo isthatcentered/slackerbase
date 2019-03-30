@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import firebase, { firestore } from "firebase"
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 
 
@@ -17,7 +18,7 @@ firebase.initializeApp( {
 	messagingSenderId: "451211342052",
 } );
 
-export const db = firestore()
+export const db = firebase.firestore()
 
 
 
