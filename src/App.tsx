@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 
 
+
+
+interface Channel
+{
+	id: string
+	topic: string
+}
 
 
 function App()
 {
+	
+	const [ channels, setChannels ] = useState<Channel[]>( [
+		{
+			id:    "Random",
+			topic: "Talking about random stuff",
+		},
+		{
+			id:    "General",
+			topic: "I ain't afraid of no ghotsts",
+		},
+	] )
+	
+	
 	return (
 		<div className="App">
 			<div className="Nav">
@@ -22,11 +42,9 @@ function App()
 					</div>
 				</div>
 				<nav className="ChannelNav">
-					<a href="/channel/awesome"># awesome</a>
-					<a className="active"
-					   href="/channel/general">
-						# general
-					</a>
+					{channels.map( channel =>
+						<a href={`/channel/${channel.id}`}># {channel.id}</a>,
+					)}
 				</nav>
 			</div>
 			<div className="Channel">
