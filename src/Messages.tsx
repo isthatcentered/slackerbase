@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { message } from "./ChatInputBox"
 import { db } from "./index"
-import { mapSnapshotToDocuments } from "./Nav"
 
 
 
@@ -12,16 +11,30 @@ export interface MessagesProps
 }
 
 
-export function Messages( { channel }: MessagesProps )
+function useCollection<T>( path: string ): T[]
 {
-	const [ messages, setMessages ] = useState<message[]>( [] )
+	const [ docs, setDocs ] = useState<T[]>( [] )
+	
+	const mapSnapshotToDocuments = ( snapshot: firebase.firestore.QuerySnapshot ): any[] =>
+		snapshot.docs
+			.map( doc => ({
+				id: doc.id,
+				...doc.data(),
+			}) )
 	
 	useEffect( () => {
-		return db.collection( `channels/${channel}/messages` )
+		return db.collection( path )
 			.orderBy( "createdAt" as keyof message )
-			.onSnapshot( snapshot =>
-				setMessages( mapSnapshotToDocuments<message>( snapshot ) ) )
+			.onSnapshot( snapshot => setDocs( mapSnapshotToDocuments( snapshot ) ) )
 	}, [] )
+	
+	return docs
+}
+
+
+export function Messages( { channel }: MessagesProps )
+{
+	const messages: message[] = useCollection<message>( `channels/${channel}/messages` )
 	
 	return (
 		<div className="Messages">
