@@ -3,6 +3,26 @@ import React from "react"
 
 
 
+export interface ChatInputBoxProps
+{
+
+}
+
+
+export function ChatInputBox( {}: ChatInputBoxProps )
+{
+	
+	return (
+		<div className="ChatInputBox">
+			<input
+				className="ChatInput"
+				placeholder="Message #general"
+			/>
+		</div>
+	)
+}
+
+
 export interface ChannelProps
 {
 
@@ -47,10 +67,8 @@ export function Channel( {}: ChannelProps )
 						</div>
 					</div>
 				</div>
-				<div className="ChatInputBox">
-					<input className="ChatInput"
-					       placeholder="Message #general"/>
-				</div>
+				<ChatInputBox/>
+			
 			</div>
 			<div className="Members">
 				<div>
