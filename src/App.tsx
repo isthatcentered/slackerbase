@@ -25,19 +25,19 @@ interface Channel
 function App()
 {
 	
-	const [ channels, setChannels ] = useState<Channel[]>( [
-		{
-			id:    "Random",
-			topic: "Talking about random stuff",
-		},
-		{
-			id:    "General",
-			topic: "I ain't afraid of no ghotsts",
-		},
-	] )
+	const [ channels, setChannels ] = useState<Channel[]>( [] )
 	
 	useEffect( () => {
-		db.collection( "channels" ).onSnapshot( console.log )
+		db.collection( "channels" )
+			.onSnapshot( snapshot => {
+				const channels: Channel[] = snapshot.docs
+					.map( doc => ({
+						id: doc.id,
+						...doc.data(),
+					}) as Channel )
+				
+				setChannels( channels )
+			} )
 	} )
 	
 	return (
