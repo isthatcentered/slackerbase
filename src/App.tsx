@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import firebase, { firestore } from "firebase"
 
 
@@ -36,6 +36,9 @@ function App()
 		},
 	] )
 	
+	useEffect( () => {
+		db.collection( "channels" ).onSnapshot( console.log )
+	} )
 	
 	return (
 		<div className="App">
@@ -66,7 +69,7 @@ function App()
 					<div className="ChannelInfo">
 						<div className="Topic">
 							Topic: <input className="TopicInput"
-							              value="Awesome stuff"/>
+							              defaultValue="Awesome stuff"/>
 						</div>
 						<div className="ChannelName">#general</div>
 					</div>
