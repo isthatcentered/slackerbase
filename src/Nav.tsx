@@ -1,5 +1,5 @@
-import React, { HTMLAttributes, useEffect, useState } from "react"
-import { db } from "./index"
+import React, { HTMLAttributes } from "react"
+import { useCollection } from "./useCollectionHook"
 import { channel } from "./App"
 
 
@@ -14,13 +14,7 @@ export interface NavProps extends HTMLAttributes<HTMLDivElement>
 export function Nav( {}: NavProps )
 {
 	
-	const [ channels, setChannels ] = useState<channel[]>( [] )
-	
-	useEffect( () => {
-		return db.collection( "channels" )
-			.onSnapshot( snapshot =>
-				setChannels( mapSnapshotToDocuments<channel>( snapshot ) ) )
-	}, [] )
+	const channels = useCollection<channel>( "channels" )
 	
 	
 	return (
@@ -51,12 +45,4 @@ export function Nav( {}: NavProps )
 }
 
 
-export function mapSnapshotToDocuments<T>( snapshot: firebase.firestore.QuerySnapshot ): T[]
-{
-	return snapshot
-		.docs
-		.map( doc => ({
-			id: doc.id,
-			...doc.data(),
-		}) as any as T )
-}
+
