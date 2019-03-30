@@ -39,27 +39,28 @@ export function Messages( { channel }: MessagesProps )
 					<div className="DayLine"/>
 				</div>
 				
-				{messages.map( m => <MessageWithAvatar key={m.id}
-				                                       message={m}/> )}
-			
-			</div>
-			
-			<div>
-				<div className="Message no-avatar">
-					<div className="MessageContent">works now?</div>
-				</div>
+				{messages.map( ( m, index ) =>
+					index === 0 ?
+					<MessageWithAvatar
+						key={m.id}
+						message={m}
+					/> :
+					<MessageWithoutAvatar
+						key={m.id}
+						message={m}
+					/> )}
 			</div>
 		</div>)
 }
 
 
-export interface MessageWithAvatarProps
+interface MessageWithAvatarProps
 {
 	message: message
 }
 
 
-export function MessageWithAvatar( { message: { body } }: MessageWithAvatarProps )
+function MessageWithAvatar( { message: { body } }: MessageWithAvatarProps )
 {
 	
 	return (
@@ -72,6 +73,24 @@ export function MessageWithAvatar( { message: { body } }: MessageWithAvatarProps
 					<span className="TimeStamp">3:37 PM</span>
 				</div>
 				
+				<div className="MessageContent">{body}</div>
+			</div>
+		</div>)
+}
+
+
+export interface MessageWithoutAvatarProps
+{
+	message: message
+}
+
+
+export function MessageWithoutAvatar( { message: { body } }: MessageWithoutAvatarProps )
+{
+	
+	return (
+		<div>
+			<div className="Message no-avatar">
 				<div className="MessageContent">{body}</div>
 			</div>
 		</div>)
