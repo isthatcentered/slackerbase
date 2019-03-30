@@ -24,8 +24,8 @@ export function Channel( {}: ChannelProps )
 					</div>
 					<div className="ChannelName">#general</div>
 				</div>
-				<Messages>
-				</Messages>
+				
+				<Messages/>
 				
 				<ChatInputBox/>
 			

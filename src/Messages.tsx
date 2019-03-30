@@ -37,7 +37,5 @@ export function Messages( {}: MessagesProps )
 					<div className="MessageContent">works now?</div>
 				</div>
 			</div>
-		</div>
-	
-	)
+		</div>)
 }
