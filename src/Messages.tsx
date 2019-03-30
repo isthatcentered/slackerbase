@@ -1,4 +1,5 @@
 import React from "react"
+import { message } from "./ChatInputBox"
 
 
 
@@ -11,31 +12,64 @@ export interface MessagesProps
 
 export function Messages( {}: MessagesProps )
 {
+	const messages: message[] = [
+		{
+			id:        "sdfg",
+			body:      "Alright, lets do this.",
+			createdAt: new Date(),
+		},
+		{
+			id:        "ssqdfdfg",
+			body:      "works now?",
+			createdAt: new Date(),
+		},
+	]
 	
 	return (
 		<div className="Messages">
 			<div className="EndOfMessages">That's every message!</div>
 			<div>
+				
 				<div className="Day">
 					<div className="DayLine"/>
 					<div className="DayText">12/6/2018</div>
 					<div className="DayLine"/>
 				</div>
-				<div className="Message with-avatar">
-					<div className="Avatar"/>
-					<div className="Author">
-						<div>
-							<span className="UserName">Ryan Florence </span>
-							<span className="TimeStamp">3:37 PM</span>
-						</div>
-						<div className="MessageContent">Alright, lets do this.</div>
-					</div>
-				</div>
+				
+				{messages.map( m => <MessageWithAvatar key={m.id}
+				                                       message={m}/> )}
+			
 			</div>
+			
 			<div>
 				<div className="Message no-avatar">
 					<div className="MessageContent">works now?</div>
 				</div>
+			</div>
+		</div>)
+}
+
+
+export interface MessageWithAvatarProps
+{
+	message: message
+}
+
+
+export function MessageWithAvatar( { message: { body } }: MessageWithAvatarProps )
+{
+	
+	return (
+		<div className="Message with-avatar">
+			<div className="Avatar"/>
+			
+			<div className="Author">
+				<div>
+					<span className="UserName">Ryan Florence </span>
+					<span className="TimeStamp">3:37 PM</span>
+				</div>
+				
+				<div className="MessageContent">{body}</div>
 			</div>
 		</div>)
 }

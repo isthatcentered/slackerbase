@@ -6,6 +6,7 @@ import { db } from "./index"
 
 export interface message
 {
+	id: string
 	body: string
 	createdAt: Date
 }
@@ -33,13 +34,11 @@ export function ChatInputBox( {}: ChatInputBoxProps )
 		
 		(e.target as HTMLFormElement).reset()
 		
-		const post: message = {
-			body:      message,
-			createdAt: new Date(),
-		}
-		
 		db.collection( "/channels/general/messages" )
-			.add( post )
+			.add( {
+				body:      message,
+				createdAt: new Date(),
+			} as message )
 	}
 	
 	
