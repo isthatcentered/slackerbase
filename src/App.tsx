@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Nav } from "./Nav"
 import { Channel } from "./Channel"
 import { firebase } from "./index"
@@ -16,14 +16,14 @@ export interface channel
 
 function App()
 {
-	const [ user, setUser ] = useState<object | undefined>( undefined )
+	const [ user, setUser ] = useState<any | undefined>( undefined )
 	
+	useEffect( () => firebase.auth().onAuthStateChanged( setUser ), [] )
 	
 	function handleSignIn()
 	{
 		firebase.auth()
 			.signInWithPopup( new firebase.auth.GoogleAuthProvider() )
-			.then( setUser )
 			.then( console.log )
 	}
 	
