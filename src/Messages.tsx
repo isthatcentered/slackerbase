@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { message } from "./ChatInputBox"
 import { db } from "./index"
+import { mapSnapshotToDocuments } from "./Nav"
 
 
 
@@ -17,15 +18,8 @@ export function Messages( { channel }: MessagesProps )
 	
 	useEffect( () => {
 		return db.collection( `channels/${channel}/messages` )
-			.onSnapshot( snapshot => {
-				
-				const messages = snapshot.docs.map( doc => ({
-					...doc.data(),
-					id: doc.id,
-				}) ) as message[]
-				console.log( messages )
-				setMessages( messages )
-			} )
+			.onSnapshot( snapshot =>
+				setMessages( mapSnapshotToDocuments<message>( snapshot ) ) )
 	}, [] )
 	
 	return (

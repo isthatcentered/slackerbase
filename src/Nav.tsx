@@ -51,7 +51,7 @@ export function Nav( {}: NavProps )
 }
 
 
-function mapSnapshotToDocuments<T>( snapshot: firebase.firestore.QuerySnapshot ): T[]
+export function mapSnapshotToDocuments<T>( snapshot: firebase.firestore.QuerySnapshot ): T[]
 {
 	return snapshot
 		.docs
