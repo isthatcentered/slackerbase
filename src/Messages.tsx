@@ -1,29 +1,32 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { message } from "./ChatInputBox"
+import { db } from "./index"
 
 
 
 
 export interface MessagesProps
 {
-
+	channel: string
 }
 
 
-export function Messages( {}: MessagesProps )
+export function Messages( { channel }: MessagesProps )
 {
-	const messages: message[] = [
-		{
-			id:        "sdfg",
-			body:      "Alright, lets do this.",
-			createdAt: new Date(),
-		},
-		{
-			id:        "ssqdfdfg",
-			body:      "works now?",
-			createdAt: new Date(),
-		},
-	]
+	const [ messages, setMessages ] = useState<message[]>( [] )
+	
+	useEffect( () => {
+		return db.collection( `channels/${channel}/messages` )
+			.onSnapshot( snapshot => {
+				
+				const messages = snapshot.docs.map( doc => ({
+					...doc.data(),
+					id: doc.id,
+				}) ) as message[]
+				console.log( messages )
+				setMessages( messages )
+			} )
+	}, [] )
 	
 	return (
 		<div className="Messages">
