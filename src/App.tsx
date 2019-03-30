@@ -43,7 +43,8 @@ function App()
 				</div>
 				<nav className="ChannelNav">
 					{channels.map( ( { id } ) =>
-						<a href={`/channel/${id}`}>
+						<a href={`/channel/${id}`}
+							key={id}>
 							# {id}
 						</a> )}
 				</nav>
