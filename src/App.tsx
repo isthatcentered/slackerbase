@@ -28,7 +28,7 @@ function App()
 	const [ channels, setChannels ] = useState<Channel[]>( [] )
 	
 	useEffect( () => {
-		db.collection( "channels" )
+		const unsubscribe = db.collection( "channels" )
 			.onSnapshot( snapshot => {
 				const channels: Channel[] = snapshot.docs
 					.map( doc => ({
@@ -38,7 +38,8 @@ function App()
 				
 				setChannels( channels )
 			} )
-	} )
+		return unsubscribe
+	}, [] )
 	
 	return (
 		<div className="App">
