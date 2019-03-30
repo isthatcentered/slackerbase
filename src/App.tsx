@@ -1,7 +1,19 @@
 import React, { useState } from "react";
+import firebase, { firestore } from "firebase"
 
 
 
+
+firebase.initializeApp( {
+	apiKey:            "AIzaSyA6knUASvHehbo1hNQmWTFmG2WlszEROTg",
+	authDomain:        "reach-slack.firebaseapp.com",
+	databaseURL:       "https://reach-slack.firebaseio.com",
+	projectId:         "reach-slack",
+	storageBucket:     "reach-slack.appspot.com",
+	messagingSenderId: "451211342052",
+} );
+
+const db = firestore()
 
 interface Channel
 {
@@ -44,7 +56,7 @@ function App()
 				<nav className="ChannelNav">
 					{channels.map( ( { id } ) =>
 						<a href={`/channel/${id}`}
-							key={id}>
+						   key={id}>
 							# {id}
 						</a> )}
 				</nav>
