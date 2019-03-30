@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { message } from "./ChatInputBox"
-import { db } from "./index"
+import { useCollection } from "./useCollectionHook"
 
 
 
@@ -11,30 +11,9 @@ export interface MessagesProps
 }
 
 
-function useCollection<T>( path: string ): T[]
-{
-	const [ docs, setDocs ] = useState<T[]>( [] )
-	
-	const mapSnapshotToDocuments = ( snapshot: firebase.firestore.QuerySnapshot ): any[] =>
-		snapshot.docs
-			.map( doc => ({
-				id: doc.id,
-				...doc.data(),
-			}) )
-	
-	useEffect( () => {
-		return db.collection( path )
-			.orderBy( "createdAt" as keyof message )
-			.onSnapshot( snapshot => setDocs( mapSnapshotToDocuments( snapshot ) ) )
-	}, [] )
-	
-	return docs
-}
-
-
 export function Messages( { channel }: MessagesProps )
 {
-	const messages: message[] = useCollection<message>( `channels/${channel}/messages` )
+	const messages: message[] = useCollection<message>( `channels/${channel}/messages`, useCollection.orderByCollectionFilter( "createdAt" as keyof message ) )
 	
 	return (
 		<div className="Messages">
