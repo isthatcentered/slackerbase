@@ -17,18 +17,11 @@ export function Nav( {}: NavProps )
 	const [ channels, setChannels ] = useState<channel[]>( [] )
 	
 	useEffect( () => {
-		const unsubscribe = db.collection( "channels" )
-			.onSnapshot( snapshot => {
-				const channels: channel[] = snapshot.docs
-					.map( doc => ({
-						id: doc.id,
-						...doc.data(),
-					}) as channel )
-				
-				setChannels( channels )
-			} )
-		return unsubscribe
+		return db.collection( "channels" )
+			.onSnapshot( snapshot =>
+				setChannels( mapSnapshotToDocuments<channel>( snapshot ) ) )
 	}, [] )
+	
 	
 	return (
 		<div className="Nav">
@@ -53,4 +46,17 @@ export function Nav( {}: NavProps )
 					</a> )}
 			</nav>
 		</div>)
+	
+	
+}
+
+
+function mapSnapshotToDocuments<T>( snapshot: firebase.firestore.QuerySnapshot ): T[]
+{
+	return snapshot
+		.docs
+		.map( doc => ({
+			id: doc.id,
+			...doc.data(),
+		}) as any as T )
 }
