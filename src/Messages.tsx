@@ -18,6 +18,7 @@ export function Messages( { channel }: MessagesProps )
 	
 	useEffect( () => {
 		return db.collection( `channels/${channel}/messages` )
+			.orderBy( "createdAt" as keyof message )
 			.onSnapshot( snapshot =>
 				setMessages( mapSnapshotToDocuments<message>( snapshot ) ) )
 	}, [] )
