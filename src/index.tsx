@@ -1,10 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import firebase from "firebase/app";
-import "firebase/firestore";
+import React from "react"
+import ReactDOM from "react-dom"
+import "./index.css"
+import App from "./App"
+import * as serviceWorker from "./serviceWorker"
+import firebase from "firebase/app"
+import "firebase/auth"
+import "firebase/firestore"
 
 
 
@@ -16,15 +17,16 @@ firebase.initializeApp( {
 	projectId:         "reach-slack",
 	storageBucket:     "reach-slack.appspot.com",
 	messagingSenderId: "451211342052",
-} );
+} )
 
 export const db = firebase.firestore()
 
+export { firebase }
 
 
-ReactDOM.render( <App/>, document.getElementById( "root" ) );
+ReactDOM.render( <App/>, document.getElementById( "root" ) )
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
