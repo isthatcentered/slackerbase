@@ -23,7 +23,7 @@ export function Messages( { channel }: MessagesProps )
 				<DayLine/>
 				
 				{messages.map( ( m, index ) =>
-					index === 0 ?
+					!isFromSameUser( m, messages[ index - 1 ] ) ?
 					<MessageWithAvatar
 						key={m.id}
 						message={m}
@@ -34,7 +34,14 @@ export function Messages( { channel }: MessagesProps )
 					/> )}
 			</div>
 		</div>)
+	
+	
+	function isFromSameUser( message: message, prevMessage: message | undefined ): boolean
+	{
+		return !!prevMessage && (message.user as any).id === (prevMessage.user as any).id
+	}
 }
+
 
 
 function DayLine()
