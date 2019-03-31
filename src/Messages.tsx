@@ -1,30 +1,11 @@
-import React, { HTMLAttributes, RefObject, useEffect, useRef } from "react"
+import React from "react"
 import { message, user } from "./contracts"
 import { useCollectionSubscription } from "./useCollectionSubscription"
 import { distanceInWords, format, isSameDay } from "date-fns"
 import { useDocWithCache } from "./useDocWithCache"
+import { ScrollToBottomOnUpdate } from "./ScrollToBottomOnUpdate"
 
 
-
-
-function useScrollToBottomOnUpdate( ref: RefObject<HTMLElement> )
-{
-	useEffect( () => {
-		const node = ref.current
-		if ( node )
-			node.scrollTop = node.scrollHeight
-	} )
-}
-
-
-
-export function ScrollToBottomOnUpdate( props: HTMLAttributes<HTMLDivElement> )
-{
-	const scrollRef = useRef<HTMLDivElement>( null )
-	useScrollToBottomOnUpdate( scrollRef )
-	
-	return <div{...props} ref={scrollRef}/>
-}
 
 
 export interface MessagesProps
