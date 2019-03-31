@@ -7,11 +7,11 @@ import { message } from "./contracts"
 
 export interface ChatInputBoxProps
 {
-
+	channel: string
 }
 
 
-export function ChatInputBox( {}: ChatInputBoxProps )
+export function ChatInputBox( { channel }: ChatInputBoxProps )
 {
 	
 	function handleSubmit( e: FormEvent<HTMLFormElement> )
@@ -28,7 +28,7 @@ export function ChatInputBox( {}: ChatInputBoxProps )
 		
 		(e.target as HTMLFormElement).reset()
 		
-		db.collection( "/channels/general/messages" )
+		db.collection( `/channels/${channel}/messages` )
 			.add( {
 				body:      message,
 				createdAt: new Date(),

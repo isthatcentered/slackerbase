@@ -27,7 +27,7 @@ export function Channel( {}: ChannelProps )
 				
 				<Messages channel={"general"}/>
 				
-				<ChatInputBox/>
+				<ChatInputBox channel={"general"}/>
 			
 			</div>
 			<div className="Members">
