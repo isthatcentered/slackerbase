@@ -1,6 +1,6 @@
 import React from "react"
 import { message, user } from "./contracts"
-import { useCollection, useDoc } from "./hooks"
+import { useCollection, useDocWithCache } from "./hooks"
 
 
 
@@ -57,7 +57,7 @@ function DayLine()
 
 function MessageWithAvatar( { message }: { message: message } )
 {
-	const author: user = useDoc<user>( message.user.path )
+	const author: user = useDocWithCache<user>( message.user.path )
 	
 	return (
 		<div className="Message with-avatar">

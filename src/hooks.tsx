@@ -43,22 +43,24 @@ const cache: Map<string, any> = new Map()
 const pendingCache: Map<string, Promise<firebase.firestore.DocumentSnapshot>> = new Map()
 
 
-export function useDoc<T>( path: string ): T
+export function useDocWithCache<T>( path: string ): T
 {
 	const [ doc, setDoc ] = useState<any | undefined>()
 	
 	useEffect( () => {
 		let mounted = true
 		
-		if ( cache.has( path ) ) {
+		if ( alreadyInCache( path ) ) {
 			mounted && setDoc( cache.get( path ) )
-			return // We already have the data you asked for in memory
+			return
 		}
 		
-		if ( !pendingCache.has( path ) )
+		if ( !alreadyFetching( path ) )
 			pendingCache.set( path, db.doc( path ).get() )
 		
-		pendingCache.get( path )!
+		
+		pendingCache
+			.get( path )!
 			.then( doc => {
 				
 				let data = {
@@ -67,10 +69,10 @@ export function useDoc<T>( path: string ): T
 				}
 				
 				cache.set( path, data )
-				console.log( cache )
 				
 				mounted && setDoc( data )
 			} )
+		
 		
 		return () => {
 			mounted = false
@@ -78,4 +80,17 @@ export function useDoc<T>( path: string ): T
 	}, [ path ] )
 	
 	return doc as T
+	
+	
+	function alreadyInCache( path: string ): boolean
+	{
+		return cache.has( path )
+	}
+	
+	
+	function alreadyFetching( path: string ): boolean
+	{
+		return pendingCache.has( path )
+	}
 }
+
