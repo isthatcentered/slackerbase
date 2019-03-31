@@ -35,16 +35,23 @@ function App()
 
 function Login()
 {
+	const [ error, setError ] = useState<string | undefined>( undefined )
+	
+	
 	function handleSignIn()
 	{
 		firebase.auth()
 			.signInWithPopup( new firebase.auth.GoogleAuthProvider() )
 			.then( console.log )
+			.catch( err => setError( err.message ) )
 	}
 	
 	
 	return (
 		<div className="Login">
+			
+			{error && <p>💩 happenned, "{error}"</p>}
+			
 			<h1>Chat!</h1>
 			<button onClick={handleSignIn}>Sign in with Google</button>
 		</div>
