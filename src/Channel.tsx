@@ -7,14 +7,15 @@ import { RouteComponentProps } from "@reach/router"
 
 
 
-export interface ChannelProps extends RouteComponentProps
+export interface ChannelProps extends RouteComponentProps<{ channelId: string }>
 {
 	user: user
 }
 
 
-export function Channel( { user }: ChannelProps )
+export function Channel( { user, channelId }: ChannelProps )
 {
+	const _channelId: string = channelId || "general"
 	
 	return (
 		<div className="Channel">
@@ -24,12 +25,12 @@ export function Channel( { user }: ChannelProps )
 						Topic: <input className="TopicInput"
 						              defaultValue="Awesome stuff"/>
 					</div>
-					<div className="ChannelName">#general</div>
+					<div className="ChannelName">#{_channelId}</div>
 				</div>
 				
-				<Messages channel={"general"}/>
+				<Messages channel={_channelId}/>
 				
-				<ChatInputBox channel={"general"}
+				<ChatInputBox channel={_channelId}
 				              user={user}/>
 			
 			</div>

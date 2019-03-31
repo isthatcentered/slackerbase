@@ -42,9 +42,10 @@ export function ChatInputBox( { channel, user }: ChatInputBoxProps )
 		<form onSubmit={handleSubmit}
 		      className="ChatInputBox">
 			<input
+				autoFocus
 				name="message"
 				className="ChatInput"
-				placeholder="Message #general"
+				placeholder={`Message #${channel}`}
 			/>
 		</form>
 	)

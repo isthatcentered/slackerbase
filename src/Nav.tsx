@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from "react"
 import { useCollection } from "./hooks"
-import { channel} from "./contracts"
+import { channel, user } from "./contracts"
 import { firebase } from "./index"
-import { user } from "./contracts"
+import { Link } from "@reach/router"
 
 
 
@@ -46,10 +46,12 @@ export function Nav( { user }: NavProps )
 			</div>
 			<nav className="ChannelNav">
 				{channels.map( ( { id } ) =>
-					<a href={`/channel/${id}`}
-					   key={id}>
+					<Link
+						to={`/channels/${id}`}
+						key={id}
+					>
 						# {id}
-					</a> )}
+					</Link> )}
 			</nav>
 		</div>)
 	
