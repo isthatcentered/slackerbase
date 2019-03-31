@@ -65,7 +65,7 @@ function useAuthenticatedWatch()
 				                          } :
 				                          null
 				if ( user )
-					db.doc( `user/${user.uid}` )
+					db.doc( `users/${user.uid}` )
 						.set( user, { merge: true } )
 						.catch( console.error )
 				
