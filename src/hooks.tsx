@@ -18,8 +18,6 @@ export function useCollection<T>( path: string, filter: collectionFilter = colle
 			.onSnapshot( snapshot => setDocs( mapSnapshotToDocuments( snapshot ) ) )
 	}, [ path ] )
 	
-	console.log( "useCollection render" )
-	
 	return docs
 	
 	
@@ -44,16 +42,22 @@ export function useDoc<T>( path: string ): T
 {
 	const [ doc, setDoc ] = useState<any | undefined>()
 	
-	useEffect( () =>
+	useEffect( () => {
+		let mounted = true
+		
 		db.doc( path )
-			.onSnapshot( doc => {
-				setDoc( {
+			.get()
+			.then( doc => {
+				mounted && setDoc( {
 					uid: doc.id,
 					...doc.data(),
 				} )
-			} ), [ path ] )
-	
-	console.log( "useDoc render" )
+			} )
+		
+		return () => {
+			mounted = false
+		}
+	}, [ path ] )
 	
 	return doc as T
 }
