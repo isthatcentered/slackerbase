@@ -2,11 +2,12 @@ import React from "react"
 import { ChatInputBox } from "./ChatInputBox"
 import { Messages } from "./Messages"
 import { user } from "./contracts"
+import { RouteComponentProps } from "@reach/router"
 
 
 
 
-export interface ChannelProps
+export interface ChannelProps extends RouteComponentProps
 {
 	user: user
 }

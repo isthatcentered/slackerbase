@@ -3,6 +3,7 @@ import { Nav } from "./Nav"
 import { Channel } from "./Channel"
 import { db, firebase } from "./index"
 import { user } from "./contracts"
+import { Redirect, Router } from "@reach/router"
 
 
 
@@ -14,7 +15,18 @@ function App()
 	return user ?
 	       <div className="App">
 		       <Nav user={user}/>
-		       <Channel user={user}/>
+		       <Router>
+			       <Channel
+				       user={user}
+				       path="channels/:channelId"
+			       />
+			
+			       <Redirect
+				       from="/"
+				       to="channels/general"
+				       noThrow={true}
+			       />
+		       </Router>
 	       </div> :
 	       <Login/>
 }
@@ -53,7 +65,6 @@ function useAuthenticatedWatch()
 	useEffect(
 		() =>
 			firebase.auth().onAuthStateChanged( ( fbUser ) => {
-				
 				const user: user | null = fbUser ?
 				                          {
 					                          uid:         fbUser.uid,
@@ -64,12 +75,12 @@ function useAuthenticatedWatch()
 					                          providerId:  fbUser.providerId,
 				                          } :
 				                          null
+				setUser( user )
+				
 				if ( user )
 					db.doc( `users/${user.uid}` )
 						.set( user, { merge: true } )
 						.catch( console.error )
-				
-				setUser( user )
 			} ),
 		[],
 	)
