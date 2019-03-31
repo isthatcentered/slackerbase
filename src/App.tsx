@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Nav } from "./Nav"
 import { Channel } from "./Channel"
-import { firebase } from "./index"
+import { db, firebase } from "./index"
 
 
 
@@ -21,8 +21,7 @@ export interface user extends firebase.UserInfo
 
 function App()
 {
-	
-	const user = useUser()
+	const user = useAuthenticatedWatch()
 	
 	return user ?
 	       <div className="App">
@@ -59,13 +58,31 @@ function Login()
 }
 
 
-function useUser()
+function useAuthenticatedWatch()
 {
 	const [ user, setUser ] = useState<user | null>( null )
 	
 	useEffect(
 		() =>
-			firebase.auth().onAuthStateChanged( ( user ) => setUser( user ) ),
+			firebase.auth().onAuthStateChanged( ( fbUser ) => {
+				
+				const user: user | null = fbUser ?
+				                          {
+					                          uid:         fbUser.uid,
+					                          displayName: fbUser.displayName,
+					                          email:       fbUser.email,
+					                          phoneNumber: fbUser.phoneNumber,
+					                          photoURL:    fbUser.photoURL,
+					                          providerId:  fbUser.providerId,
+				                          } :
+				                          null
+				if ( user )
+					db.doc( `user/${user.uid}` )
+						.set( user, { merge: true } )
+						.catch( console.error )
+				
+				setUser( user )
+			} ),
 		[],
 	)
 	
