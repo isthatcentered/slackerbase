@@ -12,7 +12,7 @@ export interface ChatInputBoxProps
 }
 
 
-export function ChatInputBox( { channel }: ChatInputBoxProps )
+export function ChatInputBox( { channel, user }: ChatInputBoxProps )
 {
 	
 	function handleSubmit( e: FormEvent<HTMLFormElement> )
@@ -31,6 +31,7 @@ export function ChatInputBox( { channel }: ChatInputBoxProps )
 		
 		db.collection( `/channels/${channel}/messages` )
 			.add( {
+				user:      db.doc( `users/${user.uid}` ) as any as user,
 				body:      message,
 				createdAt: new Date(),
 			} as message )

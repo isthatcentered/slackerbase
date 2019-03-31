@@ -8,6 +8,7 @@ export interface message
 	id: string
 	body: string
 	createdAt: Date
+	user: user
 }
 
 export interface channel
