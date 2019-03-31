@@ -1,7 +1,7 @@
 import React from "react"
 import { message, user } from "./contracts"
 import { useCollection, useDocWithCache } from "./hooks"
-import { format, isSameDay } from "date-fns"
+import { distanceInWords, format, isSameDay } from "date-fns"
 
 
 
@@ -21,19 +21,14 @@ export function Messages( { channel }: MessagesProps )
 		<div className="Messages">
 			<div className="EndOfMessages">That's every message!</div>
 			<div>
-				
-				
-				{messages.map( ( m, index ) => {
-					return (
-						<div key={m.id}>
-							
-							{shouldShowDay( m, messages[ index - 1 ] ) && <DayLine/>}
-							
-							{shouldDisplayAvatar( m, messages[ index - 1 ] ) ?
-							 <MessageWithAvatar message={m}/> :
-							 <MessageWithoutAvatar message={m}/>}
-						</div>)
-				} )}
+				{messages.map( ( message, index ) => (
+					<div key={message.id}>
+						{shouldShowDay( message, messages[ index - 1 ] ) && <DayLine date={message.createdAt}/>}
+						
+						{shouldDisplayAvatar( message, messages[ index - 1 ] ) ?
+						 <MessageWithAvatar message={message}/> :
+						 <MessageWithoutAvatar message={message}/>}
+					</div>) )}
 			</div>
 		</div>)
 	
@@ -61,12 +56,12 @@ export function Messages( { channel }: MessagesProps )
 
 
 
-function DayLine()
+function DayLine( { date }: { date: firebase.firestore.Timestamp } )
 {
 	return (
 		<div className="Day">
 			<div className="DayLine"/>
-			<div className="DayText">12/6/2018</div>
+			<div className="DayText">{distanceInWords( date.toMillis(), Date.now() )} ago</div>
 			<div className="DayLine"/>
 		</div>)
 }
