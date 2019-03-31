@@ -50,7 +50,7 @@ function DayLine()
 
 function MessageWithAvatar( { message }: { message: message } )
 {
-	const author: user = useDoc<user>( (message.user as any as firebase.firestore.DocumentReference).path )
+	const author: user = useDoc<user>( (message.user as any as firebase.firestore.DocumentReference).path ) // @todo: fix type for user (polymorphism or union ?)
 	
 	return (
 		<div className="Message with-avatar">
