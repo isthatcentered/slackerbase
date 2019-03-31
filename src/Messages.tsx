@@ -20,11 +20,7 @@ export function Messages( { channel }: MessagesProps )
 			<div className="EndOfMessages">That's every message!</div>
 			<div>
 				
-				<div className="Day">
-					<div className="DayLine"/>
-					<div className="DayText">12/6/2018</div>
-					<div className="DayLine"/>
-				</div>
+				<DayLine/>
 				
 				{messages.map( ( m, index ) =>
 					index === 0 ?
@@ -37,6 +33,17 @@ export function Messages( { channel }: MessagesProps )
 						message={m}
 					/> )}
 			</div>
+		</div>)
+}
+
+
+function DayLine()
+{
+	return (
+		<div className="Day">
+			<div className="DayLine"/>
+			<div className="DayText">12/6/2018</div>
+			<div className="DayLine"/>
 		</div>)
 }
 
