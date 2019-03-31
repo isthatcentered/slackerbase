@@ -3,6 +3,7 @@ import { ChatInputBox } from "./ChatInputBox"
 import { Messages } from "./Messages"
 import { user } from "./contracts"
 import { RouteComponentProps } from "@reach/router"
+import { ChannelInfos } from "./ChannelInfos"
 
 
 
@@ -44,14 +45,3 @@ export function Channel( { user, channelId }: ChannelProps )
 }
 
 
-function ChannelInfos( { channelId }: { channelId: string } )
-{
-	return (
-		<div className="ChannelInfo">
-			<div className="Topic">
-				Topic: <input className="TopicInput"
-				              defaultValue="Awesome stuff"/>
-			</div>
-			<div className="ChannelName">#{channelId}</div>
-		</div>)
-}
