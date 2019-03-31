@@ -31,6 +31,8 @@
         "not op_mini all"
     ],
     "devDependencies": {
+        "@reach/router": "^1.2.1",
+        "@types/reach__router": "^1.2.3",
         "firebase": "^5.9.2",
         "utility-types": "^3.4.1"
     }
