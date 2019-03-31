@@ -16,8 +16,9 @@ export function useCollection<T>( path: string, filter: collectionFilter = colle
 		
 		return filter( collection )
 			.onSnapshot( snapshot => setDocs( mapSnapshotToDocuments( snapshot ) ) )
-	}, [] )
+	}, [ path ] )
 	
+	console.log( "useCollection render" )
 	
 	return docs
 	
@@ -50,7 +51,9 @@ export function useDoc<T>( path: string ): T
 					uid: doc.id,
 					...doc.data(),
 				} )
-			} ), [] )
+			} ), [ path ] )
+	
+	console.log( "useDoc render" )
 	
 	return doc as T
 }
