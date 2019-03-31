@@ -38,6 +38,11 @@ useCollection.orderByCollectionFilter = ( key: string ): collectionFilter => {
 }
 
 
+
+const cache: Map<string, any> = new Map()
+const pendingCache: Map<string, Promise<firebase.firestore.DocumentSnapshot>> = new Map()
+
+
 export function useDoc<T>( path: string ): T
 {
 	const [ doc, setDoc ] = useState<any | undefined>()
@@ -45,13 +50,26 @@ export function useDoc<T>( path: string ): T
 	useEffect( () => {
 		let mounted = true
 		
-		db.doc( path )
-			.get()
+		if ( cache.has( path ) ) {
+			mounted && setDoc( cache.get( path ) )
+			return // We already have the data you asked for in memory
+		}
+		
+		if ( !pendingCache.has( path ) )
+			pendingCache.set( path, db.doc( path ).get() )
+		
+		pendingCache.get( path )!
 			.then( doc => {
-				mounted && setDoc( {
+				
+				let data = {
 					uid: doc.id,
 					...doc.data(),
-				} )
+				}
+				
+				cache.set( path, data )
+				console.log( cache )
+				
+				mounted && setDoc( data )
 			} )
 		
 		return () => {
