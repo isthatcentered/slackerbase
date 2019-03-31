@@ -1,10 +1,20 @@
-import React from "react"
+import React, { RefObject, useEffect, useRef } from "react"
 import { message, user } from "./contracts"
-import { useCollectionSubscription} from "./useCollectionSubscription"
+import { useCollectionSubscription } from "./useCollectionSubscription"
 import { distanceInWords, format, isSameDay } from "date-fns"
 import { useDocWithCache } from "./useDocWithCache"
 
 
+
+
+function useScrollToBottomOnUpdate( ref: RefObject<HTMLElement> )
+{
+	useEffect( () => {
+		const node = ref.current
+		if ( node )
+			node.scrollTop = node.scrollHeight
+	} )
+}
 
 
 export interface MessagesProps
@@ -17,9 +27,12 @@ export function Messages( { channel }: MessagesProps )
 {
 	const messages: message[] = useCollectionSubscription<message>( `channels/${channel}/messages`, useCollectionSubscription.orderByCollectionFilter( "createdAt" as keyof message ) )
 	
+	const scrollRef = useRef<HTMLDivElement>( null )
+	useScrollToBottomOnUpdate( scrollRef )
 	
 	return (
-		<div className="Messages">
+		<div ref={scrollRef}
+		     className="Messages">
 			<div className="EndOfMessages">That's every message!</div>
 			<div>
 				{messages.map( ( message, index ) => (
@@ -32,29 +45,7 @@ export function Messages( { channel }: MessagesProps )
 					</div>) )}
 			</div>
 		</div>)
-	
-	
-	function shouldShowDay( message: message, prevMessage: message | undefined ): boolean
-	{
-		if ( !prevMessage )
-			return true
-		
-		return !isSameDay( message.createdAt.toMillis(), prevMessage.createdAt.toMillis() )
-	}
-	
-	
-	function shouldDisplayAvatar( message: message, prevMessage: message | undefined ): boolean
-	{
-		if ( !prevMessage )
-			return true
-		
-		const isFromDifferentUser                   = message.user.id !== prevMessage.user.id,
-		      sameUserButMoreThan3minutesHavePassed = (message.createdAt.seconds - prevMessage.createdAt.seconds) > 60 * 3
-		
-		return isFromDifferentUser || sameUserButMoreThan3minutesHavePassed
-	}
 }
-
 
 
 function DayLine( { date }: { date: firebase.firestore.Timestamp } )
@@ -66,6 +57,7 @@ function DayLine( { date }: { date: firebase.firestore.Timestamp } )
 			<div className="DayLine"/>
 		</div>)
 }
+
 
 
 function MessageWithAvatar( { message }: { message: message } )
@@ -103,4 +95,25 @@ export function MessageWithoutAvatar( { message: { body } }: { message: message 
 				<div className="MessageContent">{body}</div>
 			</div>
 		</div>)
+}
+
+
+function shouldShowDay( message: message, prevMessage: message | undefined ): boolean
+{
+	if ( !prevMessage )
+		return true
+	
+	return !isSameDay( message.createdAt.toMillis(), prevMessage.createdAt.toMillis() )
+}
+
+
+function shouldDisplayAvatar( message: message, prevMessage: message | undefined ): boolean
+{
+	if ( !prevMessage )
+		return true
+	
+	const isFromDifferentUser                   = message.user.id !== prevMessage.user.id,
+	      sameUserButMoreThan3minutesHavePassed = (message.createdAt.seconds - prevMessage.createdAt.seconds) > 60 * 3
+	
+	return isFromDifferentUser || sameUserButMoreThan3minutesHavePassed
 }
