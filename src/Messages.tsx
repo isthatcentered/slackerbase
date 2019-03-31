@@ -24,7 +24,7 @@ export function Messages( { channel }: MessagesProps )
 				<DayLine/>
 				
 				{messages.map( ( m, index ) =>
-					!isFromSameUser( m, messages[ index - 1 ] ) ?
+					shouldDisplayAvatar( m, messages[ index - 1 ] ) ?
 					<MessageWithAvatar
 						key={m.id}
 						message={m}
@@ -37,11 +37,18 @@ export function Messages( { channel }: MessagesProps )
 		</div>)
 	
 	
-	function isFromSameUser( message: message, prevMessage: message | undefined ): boolean
+	function shouldDisplayAvatar( message: message, prevMessage: message | undefined ): boolean
 	{
-		return !!prevMessage && message.user.id === prevMessage.user.id
+		if ( !prevMessage )
+			return true
+		
+		const isFromDifferentUser                   = message.user.id !== prevMessage.user.id,
+		      sameUserButMoreThan3minutesHavePassed = (message.createdAt.seconds - prevMessage.createdAt.seconds) > 60 * 3
+		
+		return isFromDifferentUser || sameUserButMoreThan3minutesHavePassed
 	}
 }
+
 
 
 
@@ -73,7 +80,7 @@ function MessageWithAvatar( { message }: { message: message } )
 				<div>
 					<span className="UserName">{author.displayName || author.email}</span>
 					{" "}
-					<span className="TimeStamp">{format(message.createdAt.toMillis(), "h:mm A")}</span>
+					<span className="TimeStamp">{format( message.createdAt.toMillis(), "h:mm A" )}</span>
 				</div>}
 				
 				<div className="MessageContent">{message.body}</div>
