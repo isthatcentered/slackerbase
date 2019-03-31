@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef } from "react"
+import React, { HTMLAttributes, RefObject, useEffect, useRef } from "react"
 import { message, user } from "./contracts"
 import { useCollectionSubscription } from "./useCollectionSubscription"
 import { distanceInWords, format, isSameDay } from "date-fns"
@@ -17,6 +17,16 @@ function useScrollToBottomOnUpdate( ref: RefObject<HTMLElement> )
 }
 
 
+
+export function ScrollToBottomOnUpdate( props: HTMLAttributes<HTMLDivElement> )
+{
+	const scrollRef = useRef<HTMLDivElement>( null )
+	useScrollToBottomOnUpdate( scrollRef )
+	
+	return <div{...props} ref={scrollRef}/>
+}
+
+
 export interface MessagesProps
 {
 	channel: string
@@ -27,12 +37,8 @@ export function Messages( { channel }: MessagesProps )
 {
 	const messages: message[] = useCollectionSubscription<message>( `channels/${channel}/messages`, useCollectionSubscription.orderByCollectionFilter( "createdAt" as keyof message ) )
 	
-	const scrollRef = useRef<HTMLDivElement>( null )
-	useScrollToBottomOnUpdate( scrollRef )
-	
 	return (
-		<div ref={scrollRef}
-		     className="Messages">
+		<ScrollToBottomOnUpdate className="Messages">
 			<div className="EndOfMessages">That's every message!</div>
 			<div>
 				{messages.map( ( message, index ) => (
@@ -44,7 +50,7 @@ export function Messages( { channel }: MessagesProps )
 						 <MessageWithoutAvatar message={message}/>}
 					</div>) )}
 			</div>
-		</div>)
+		</ScrollToBottomOnUpdate>)
 }
 
 
