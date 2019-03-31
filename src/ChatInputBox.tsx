@@ -31,7 +31,7 @@ export function ChatInputBox( { channel, user }: ChatInputBoxProps )
 		
 		db.collection( `/channels/${channel}/messages` )
 			.add( {
-				user:      db.doc( `users/${user.uid}` ) as any as user,
+				user:      db.doc( `users/${user.uid}` ),
 				body:      message,
 				createdAt: new Date(),
 			} as message )

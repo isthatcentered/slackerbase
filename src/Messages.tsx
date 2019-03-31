@@ -38,7 +38,7 @@ export function Messages( { channel }: MessagesProps )
 	
 	function isFromSameUser( message: message, prevMessage: message | undefined ): boolean
 	{
-		return !!prevMessage && (message.user as any).id === (prevMessage.user as any).id
+		return !!prevMessage && message.user.id === prevMessage.user.id
 	}
 }
 
@@ -57,7 +57,7 @@ function DayLine()
 
 function MessageWithAvatar( { message }: { message: message } )
 {
-	const author: user = useDoc<user>( (message.user as any as firebase.firestore.DocumentReference).path ) // @todo: fix type for user (polymorphism or union ?)
+	const author: user = useDoc<user>( message.user.path )
 	
 	return (
 		<div className="Message with-avatar">
