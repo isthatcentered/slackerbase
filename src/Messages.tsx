@@ -1,7 +1,7 @@
 import React from "react"
 import { message, user } from "./contracts"
 import { useCollection, useDocWithCache } from "./hooks"
-import { format } from "date-fns"
+import { format, isSameDay } from "date-fns"
 
 
 
@@ -16,25 +16,35 @@ export function Messages( { channel }: MessagesProps )
 {
 	const messages: message[] = useCollection<message>( `channels/${channel}/messages`, useCollection.orderByCollectionFilter( "createdAt" as keyof message ) )
 	
+	
 	return (
 		<div className="Messages">
 			<div className="EndOfMessages">That's every message!</div>
 			<div>
 				
-				<DayLine/>
 				
-				{messages.map( ( m, index ) =>
-					shouldDisplayAvatar( m, messages[ index - 1 ] ) ?
-					<MessageWithAvatar
-						key={m.id}
-						message={m}
-					/> :
-					<MessageWithoutAvatar
-						key={m.id}
-						message={m}
-					/> )}
+				{messages.map( ( m, index ) => {
+					return (
+						<div key={m.id}>
+							
+							{shouldShowDay( m, messages[ index - 1 ] ) && <DayLine/>}
+							
+							{shouldDisplayAvatar( m, messages[ index - 1 ] ) ?
+							 <MessageWithAvatar message={m}/> :
+							 <MessageWithoutAvatar message={m}/>}
+						</div>)
+				} )}
 			</div>
 		</div>)
+	
+	
+	function shouldShowDay( message: message, prevMessage: message | undefined ): boolean
+	{
+		if ( !prevMessage )
+			return true
+		
+		return !isSameDay( message.createdAt.toMillis(), prevMessage.createdAt.toMillis() )
+	}
 	
 	
 	function shouldDisplayAvatar( message: message, prevMessage: message | undefined ): boolean
@@ -48,7 +58,6 @@ export function Messages( { channel }: MessagesProps )
 		return isFromDifferentUser || sameUserButMoreThan3minutesHavePassed
 	}
 }
-
 
 
 
