@@ -37,3 +37,20 @@ useCollection.orderByCollectionFilter = ( key: string ): collectionFilter => {
 	return collection =>
 		collection.orderBy( key )
 }
+
+
+export function useDoc<T>( path: string ): T
+{
+	const [ doc, setDoc ] = useState<any | undefined>()
+	
+	useEffect( () =>
+		db.doc( path )
+			.onSnapshot( doc => {
+				setDoc( {
+					uid: doc.id,
+					...doc.data(),
+				} )
+			} ), [] )
+	
+	return doc as T
+}

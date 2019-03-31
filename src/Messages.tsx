@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { message, user } from "./contracts"
-import { useCollection } from "./useCollectionHook"
-import { db } from "./index"
+import { useCollection, useDoc } from "./hooks"
 
 
 
@@ -51,19 +50,7 @@ function DayLine()
 
 function MessageWithAvatar( { message }: { message: message } )
 {
-	const [ author, setAuthor ] = useState<user | undefined>()
-	
-	useEffect( () => {
-		let authorDocPath = (message.user as any as firebase.firestore.DocumentReference).path
-		
-		return db.doc( authorDocPath )
-			.onSnapshot( doc => {
-				setAuthor( {
-					uid: doc.id,
-					...doc.data() as user,
-				} )
-			} )
-	}, [] )
+	const author: user = useDoc<user>( (message.user as any as firebase.firestore.DocumentReference).path )
 	
 	return (
 		<div className="Message with-avatar">

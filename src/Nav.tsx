@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react"
-import { useCollection } from "./useCollectionHook"
+import { useCollection } from "./hooks"
 import { channel} from "./contracts"
 import { firebase } from "./index"
 import { user } from "./contracts"
