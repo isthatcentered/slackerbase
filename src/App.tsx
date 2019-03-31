@@ -21,15 +21,20 @@ export interface user extends firebase.UserInfo
 
 function App()
 {
-	const [ user, setUser ] = useState<user | null>( null )
 	
-	useEffect(
-		() =>
-			firebase.auth().onAuthStateChanged( ( user ) => setUser( user ) ),
-		[],
-	)
+	const user = useUser()
 	
-	
+	return user ?
+	       <div className="App">
+		       <Nav user={user}/>
+		       <Channel/>
+	       </div> :
+	       <Login/>
+}
+
+
+function Login()
+{
 	function handleSignIn()
 	{
 		firebase.auth()
@@ -38,15 +43,26 @@ function App()
 	}
 	
 	
-	return user ?
-	       (<div className="App">
-		       <Nav user={user}/>
-		       <Channel/>
-	       </div>) :
-	       (<div className="Login">
-		       <h1>Chat!</h1>
-		       <button onClick={handleSignIn}>Sign in with Google</button>
-	       </div>)
+	return (
+		<div className="Login">
+			<h1>Chat!</h1>
+			<button onClick={handleSignIn}>Sign in with Google</button>
+		</div>
+	)
+}
+
+
+function useUser()
+{
+	const [ user, setUser ] = useState<user | null>( null )
+	
+	useEffect(
+		() =>
+			firebase.auth().onAuthStateChanged( ( user ) => setUser( user ) ),
+		[],
+	)
+	
+	return user
 }
 
 
