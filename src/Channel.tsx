@@ -20,13 +20,7 @@ export function Channel( { user, channelId }: ChannelProps )
 	return (
 		<div className="Channel">
 			<div className="ChannelMain">
-				<div className="ChannelInfo">
-					<div className="Topic">
-						Topic: <input className="TopicInput"
-						              defaultValue="Awesome stuff"/>
-					</div>
-					<div className="ChannelName">#{_channelId}</div>
-				</div>
+				<ChannelInfos channelId={_channelId}/>
 				
 				<Messages channel={_channelId}/>
 				
@@ -46,5 +40,18 @@ export function Channel( { user, channelId }: ChannelProps )
 					</div>
 				</div>
 			</div>
+		</div>)
+}
+
+
+function ChannelInfos( { channelId }: { channelId: string } )
+{
+	return (
+		<div className="ChannelInfo">
+			<div className="Topic">
+				Topic: <input className="TopicInput"
+				              defaultValue="Awesome stuff"/>
+			</div>
+			<div className="ChannelName">#{channelId}</div>
 		</div>)
 }
