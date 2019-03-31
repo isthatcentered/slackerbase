@@ -1,5 +1,5 @@
 import React from "react"
-import { message } from "./ChatInputBox"
+import { message } from "./contracts"
 import { useCollection } from "./useCollectionHook"
 
 

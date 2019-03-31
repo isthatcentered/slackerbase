@@ -1,15 +1,9 @@
 import React, { FormEvent } from "react"
 import { db } from "./index"
+import { message } from "./contracts"
 
 
 
-
-export interface message
-{
-	id: string
-	body: string
-	createdAt: Date
-}
 
 export interface ChatInputBoxProps
 {

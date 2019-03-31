@@ -2,21 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Nav } from "./Nav"
 import { Channel } from "./Channel"
 import { db, firebase } from "./index"
+import { user } from "./contracts"
 
 
-
-
-export interface channel
-{
-	id: string
-	topic: string
-}
-
-
-
-export interface user extends firebase.UserInfo
-{
-}
 
 
 function App()
