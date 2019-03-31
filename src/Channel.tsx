@@ -1,17 +1,18 @@
 import React from "react"
 import { ChatInputBox } from "./ChatInputBox"
 import { Messages } from "./Messages"
+import { user } from "./contracts"
 
 
 
 
 export interface ChannelProps
 {
-
+	user: user
 }
 
 
-export function Channel( {}: ChannelProps )
+export function Channel( { user }: ChannelProps )
 {
 	
 	return (
@@ -27,7 +28,8 @@ export function Channel( {}: ChannelProps )
 				
 				<Messages channel={"general"}/>
 				
-				<ChatInputBox channel={"general"}/>
+				<ChatInputBox channel={"general"}
+				              user={user}/>
 			
 			</div>
 			<div className="Members">

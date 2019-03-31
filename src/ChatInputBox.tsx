@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react"
 import { db } from "./index"
-import { message } from "./contracts"
+import { message, user } from "./contracts"
 
 
 
@@ -8,6 +8,7 @@ import { message } from "./contracts"
 export interface ChatInputBoxProps
 {
 	channel: string
+	user: user
 }
 
 
