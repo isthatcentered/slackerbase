@@ -1,17 +1,17 @@
 import React, { HTMLAttributes } from "react"
 import { useCollection } from "./useCollectionHook"
-import { channel } from "./App"
+import { channel, user } from "./App"
 
 
 
 
 export interface NavProps extends HTMLAttributes<HTMLDivElement>
 {
-
+	user: user
 }
 
 
-export function Nav( {}: NavProps )
+export function Nav( { user }: NavProps )
 {
 	
 	const channels = useCollection<channel>( "channels" )
@@ -23,10 +23,10 @@ export function Nav( {}: NavProps )
 				<img
 					className="UserImage"
 					alt="whatever"
-					src="https://placekitten.com/64/64"
+					src={user.photoURL || "https://placekitten.com/64/64"}
 				/>
 				<div>
-					<div>Ryan Peterson Florence</div>
+					<div>{user.displayName || user.uid}</div>
 					<div>
 						<button className="text-button">log out</button>
 					</div>
