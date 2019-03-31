@@ -14,11 +14,22 @@ export interface channel
 
 
 
+export interface user extends firebase.UserInfo
+{
+}
+
+
 function App()
 {
-	const [ user, setUser ] = useState<any | undefined>( undefined )
+	const [ user, setUser ] = useState<user | undefined>( undefined )
 	
-	useEffect( () => firebase.auth().onAuthStateChanged( setUser ), [] )
+	useEffect(
+		() =>
+			firebase.auth().onAuthStateChanged( ( user ) =>
+				user && setUser( user ) ),
+		[],
+	)
+	
 	
 	function handleSignIn()
 	{
@@ -30,7 +41,7 @@ function App()
 	
 	return user ?
 	       (<div className="App">
-		       <Nav/>
+		       <Nav user={user}/>
 		       <Channel/>
 	       </div>) :
 	       (<div className="Login">
