@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from "react"
 import { useCollection } from "./useCollectionHook"
 import { channel, user } from "./App"
+import { firebase } from "./index"
 
 
 
@@ -17,6 +18,12 @@ export function Nav( { user }: NavProps )
 	const channels = useCollection<channel>( "channels" )
 	
 	
+	function handleLogout()
+	{
+		firebase.auth().signOut()
+	}
+	
+	
 	return (
 		<div className="Nav">
 			<div className="User">
@@ -26,9 +33,13 @@ export function Nav( { user }: NavProps )
 					src={user.photoURL || "https://placekitten.com/64/64"}
 				/>
 				<div>
-					<div>{user.displayName || user.uid}</div>
+					<div>{user.displayName}</div>
 					<div>
-						<button className="text-button">log out</button>
+						<button onClick={handleLogout}
+						        className="text-button"
+						>
+							log out
+						</button>
 					</div>
 				</div>
 			</div>

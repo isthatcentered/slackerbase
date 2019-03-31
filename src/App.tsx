@@ -21,12 +21,11 @@ export interface user extends firebase.UserInfo
 
 function App()
 {
-	const [ user, setUser ] = useState<user | undefined>( undefined )
+	const [ user, setUser ] = useState<user | null>( null )
 	
 	useEffect(
 		() =>
-			firebase.auth().onAuthStateChanged( ( user ) =>
-				user && setUser( user ) ),
+			firebase.auth().onAuthStateChanged( ( user ) => setUser( user ) ),
 		[],
 	)
 	
