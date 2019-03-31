@@ -1,5 +1,5 @@
 import React, { FormEvent } from "react"
-import { db } from "./index"
+import { db, firebase } from "./index"
 import { message, user } from "./contracts"
 
 
@@ -33,7 +33,7 @@ export function ChatInputBox( { channel, user }: ChatInputBoxProps )
 			.add( {
 				user:      db.doc( `users/${user.uid}` ),
 				body:      message,
-				createdAt: new Date(),
+				createdAt: firebase.firestore.Timestamp.now(),
 			} as message )
 	}
 	

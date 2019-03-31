@@ -7,7 +7,7 @@ export interface message
 {
 	id: string
 	body: string
-	createdAt: Date
+	createdAt: firebase.firestore.Timestamp
 	user: firebase.firestore.DocumentReference
 }
 

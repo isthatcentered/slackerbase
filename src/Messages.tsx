@@ -1,6 +1,7 @@
 import React from "react"
 import { message, user } from "./contracts"
 import { useCollection, useDocWithCache } from "./hooks"
+import { format } from "date-fns"
 
 
 
@@ -71,7 +72,8 @@ function MessageWithAvatar( { message }: { message: message } )
 				{author &&
 				<div>
 					<span className="UserName">{author.displayName || author.email}</span>
-					<span className="TimeStamp">3:37 PM</span>
+					{" "}
+					<span className="TimeStamp">{format(message.createdAt.toMillis(), "h:mm A")}</span>
 				</div>}
 				
 				<div className="MessageContent">{message.body}</div>
