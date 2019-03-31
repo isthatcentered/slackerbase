@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react"
-import { useCollection } from "./hooks"
+import { useCollectionSubscription } from "./useCollectionSubscription"
 import { channel, user } from "./contracts"
 import { firebase } from "./index"
 import { Link } from "@reach/router"
@@ -16,7 +16,7 @@ export interface NavProps extends HTMLAttributes<HTMLDivElement>
 export function Nav( { user }: NavProps )
 {
 	
-	const channels = useCollection<channel>( "channels" )
+	const channels = useCollectionSubscription<channel>( "channels" )
 	
 	
 	function handleLogout()

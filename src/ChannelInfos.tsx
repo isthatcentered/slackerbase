@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from "react"
-import { db } from "./index"
+import React from "react"
 import { channel } from "./contracts"
+import { useDocSubscribtion } from "./useDocSubscription"
 
 
-
-
-function useDocSubscribtion<T>( path: string ): T | undefined
-{
-	const [ doc, setDoc ] = useState<T>()
-	
-	useEffect( () =>
-		db.doc( path )
-			.onSnapshot( doc => {
-				setDoc( {
-					id: doc.id,
-					...doc.data(),
-				} as any )
-			} ), [ path ] )
-	
-	return doc as any
-}
 
 
 export function ChannelInfos( { channelId }: { channelId: string } )

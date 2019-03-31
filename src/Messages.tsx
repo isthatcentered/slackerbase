@@ -1,7 +1,8 @@
 import React from "react"
 import { message, user } from "./contracts"
-import { useCollection, useDocWithCache } from "./hooks"
+import { useCollectionSubscription} from "./useCollectionSubscription"
 import { distanceInWords, format, isSameDay } from "date-fns"
+import { useDocWithCache } from "./useDocWithCache"
 
 
 
@@ -14,7 +15,7 @@ export interface MessagesProps
 
 export function Messages( { channel }: MessagesProps )
 {
-	const messages: message[] = useCollection<message>( `channels/${channel}/messages`, useCollection.orderByCollectionFilter( "createdAt" as keyof message ) )
+	const messages: message[] = useCollectionSubscription<message>( `channels/${channel}/messages`, useCollectionSubscription.orderByCollectionFilter( "createdAt" as keyof message ) )
 	
 	
 	return (
