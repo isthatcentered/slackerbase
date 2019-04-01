@@ -1,5 +1,6 @@
 import React from "react"
 import { useCollectionSubscription } from "./useCollectionSubscription"
+import { user } from "./contracts"
 
 
 
@@ -7,20 +8,37 @@ import { useCollectionSubscription } from "./useCollectionSubscription"
 export function Members( { channel }: { channel: string } )
 {
 	
-	const members = useCollectionSubscription( `users`, query => query.where( `joinded.${channel}`, "==", true ) )
+	const members = useCollectionSubscription<user>( `users`, query =>
+		query.where( `joined.${channel}`, "==", true ) )
+		.sort( orderUsersAlphabetically )
 	
-	console.log( members, `joinded.${channel}` )
 	return (
 		<div className="Members">
 			<div>
-				<div className="Member">
-					<div className="MemberStatus offline"/>
-					Ryan Florence
-				</div>
-				<div className="Member">
-					<div className="MemberStatus online"/>
-					cleverbot
-				</div>
+				{members.map( user =>
+					<Member key={user.id}
+					        user={user}
+					/> )}
 			</div>
 		</div>)
+}
+
+
+function Member( { user }: { user: user } )
+{
+	return (
+		<div className="Member">
+			<div className="MemberStatus offline"/>
+			{user.displayName || user.email}
+		</div>)
+}
+
+
+function orderUsersAlphabetically( a: user, b: user ): number
+{
+	return a.displayName! > b.displayName! ?
+	       1 :
+	       a.displayName! < b.displayName! ?
+	       -1 :
+	       0
 }
