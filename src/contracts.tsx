@@ -19,4 +19,7 @@ export interface channel
 
 export interface user extends firebase.UserInfo
 {
+	joined: {
+		[ channel: string ]: boolean
+	}
 }

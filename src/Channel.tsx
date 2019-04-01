@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { ChatInputBox } from "./ChatInputBox"
 import { Messages } from "./Messages"
 import { user } from "./contracts"
 import { RouteComponentProps } from "@reach/router"
 import { ChannelInfos } from "./ChannelInfos"
+import { db } from "./index"
 
 
 
@@ -17,6 +18,17 @@ export interface ChannelProps extends RouteComponentProps<{ channelId: string }>
 export function Channel( { user, channelId }: ChannelProps )
 {
 	const _channelId: string = channelId || "general"
+	
+	useEffect( () => {
+		
+		db.doc( `users/${user.uid}` )
+			.set( {
+				joined: {
+					[ _channelId ]: true,
+				},
+			} as user, { merge: true } )
+		
+	}, [ channelId, user.uid ] )
 	
 	return (
 		<div className="Channel">

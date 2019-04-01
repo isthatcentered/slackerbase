@@ -67,6 +67,7 @@ function useAuthenticatedWatch()
 			firebase.auth().onAuthStateChanged( ( fbUser ) => {
 				const user: user | null = fbUser ?
 				                          {
+					                          joined:      {},
 					                          uid:         fbUser.uid,
 					                          displayName: fbUser.displayName,
 					                          email:       fbUser.email,
