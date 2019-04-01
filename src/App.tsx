@@ -62,29 +62,36 @@ function useAuthenticatedWatch()
 {
 	const [ user, setUser ] = useState<user | null>( null )
 	
-	useEffect(
-		() =>
-			firebase.auth().onAuthStateChanged( ( fbUser ) => {
-				const user: user | null = fbUser ?
-				                          {
-					                          joined:      {},
-					                          uid:         fbUser.uid,
-					                          displayName: fbUser.displayName,
-					                          email:       fbUser.email,
-					                          phoneNumber: fbUser.phoneNumber,
-					                          photoURL:    fbUser.photoURL,
-					                          providerId:  fbUser.providerId,
-				                          } :
-				                          null
-				setUser( user )
-				
-				if ( user )
+	useEffect( () => firebase.auth()
+		.onAuthStateChanged( ( fbUser ) => {
+			
+			if ( !fbUser ) {
+				setUser( null )
+				return
+			}
+			
+			const { uid, displayName, email, phoneNumber, photoURL, providerId } = fbUser,
+			      user: user                                                     = {
+				      uid,
+				      displayName,
+				      email,
+				      phoneNumber,
+				      photoURL,
+				      providerId,
+			      } as user
+			
+			db.doc( `users/${user.uid}` )
+				.set( user, { merge: true } )
+				.then( () =>
 					db.doc( `users/${user.uid}` )
-						.set( user, { merge: true } )
-						.catch( console.error )
-			} ),
-		[],
-	)
+						.get()
+						.then( doc =>
+							setUser( {
+								id: doc.id,
+								...doc.data(),
+							} as any as user ) ) )
+				.catch( console.error )
+		} ), [] )
 	
 	return user
 }

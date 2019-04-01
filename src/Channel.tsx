@@ -5,6 +5,7 @@ import { user } from "./contracts"
 import { RouteComponentProps } from "@reach/router"
 import { ChannelInfos } from "./ChannelInfos"
 import { db } from "./index"
+import { Members } from "./Members"
 
 
 
@@ -17,42 +18,30 @@ export interface ChannelProps extends RouteComponentProps<{ channelId: string }>
 
 export function Channel( { user, channelId }: ChannelProps )
 {
-	const _channelId: string = channelId || "general"
+	const _channel: string = channelId || "general"
 	
 	useEffect( () => {
-		
 		db.doc( `users/${user.uid}` )
 			.set( {
 				joined: {
-					[ _channelId ]: true,
+					[ _channel ]: true,
 				},
 			} as user, { merge: true } )
-		
 	}, [ channelId, user.uid ] )
 	
 	return (
 		<div className="Channel">
 			<div className="ChannelMain">
-				<ChannelInfos channelId={_channelId}/>
+				<ChannelInfos channelId={_channel}/>
 				
-				<Messages channel={_channelId}/>
+				<Messages channel={_channel}/>
 				
-				<ChatInputBox channel={_channelId}
+				<ChatInputBox channel={_channel}
 				              user={user}/>
 			
 			</div>
-			<div className="Members">
-				<div>
-					<div className="Member">
-						<div className="MemberStatus offline"/>
-						Ryan Florence
-					</div>
-					<div className="Member">
-						<div className="MemberStatus online"/>
-						cleverbot
-					</div>
-				</div>
-			</div>
+			
+			<Members channel={_channel}/>
 		</div>)
 }
 
