@@ -27,8 +27,8 @@ export function useWatchUserAuthStatus()
 				      providerId,
 			      } as user
 			
-			useWatchUserAuthStatus.updateUser( user.uid, user )
-				.then( () => useWatchUserAuthStatus.getUserById( user.uid ) )
+			Users.update( user.uid, user )
+				.then( () => Users.get( user.uid ) )
 				.then( setUser )
 				.catch( console.error )
 		} ), [] )
@@ -37,19 +37,26 @@ export function useWatchUserAuthStatus()
 }
 
 
-useWatchUserAuthStatus.updateUser = ( id: string, data: Partial<user> ): Promise<void> => {
-	return db.doc( `users/${id}` )
-		.set( data, { merge: true } )
-}
-
-useWatchUserAuthStatus.getUserById = ( id: string ): Promise<user | undefined> => {
-	return db.doc( `users/${id}` )
-		.get()
-		.then( doc =>
-			doc.exists ?
-			{
-				id: doc.id,
-				...doc.data(),
-			} as user :
-			undefined )
+export class Users
+{
+	
+	static update( id: string, data: Partial<user> ): Promise<void>
+	{
+		return db.doc( `users/${id}` )
+			.set( data, { merge: true } )
+	}
+	
+	
+	static get( id: string ): Promise<user | undefined>
+	{
+		return db.doc( `users/${id}` )
+			.get()
+			.then( doc =>
+				doc.exists ?
+				{
+					id: doc.id,
+					...doc.data(),
+				} as user :
+				undefined )
+	}
 }
