@@ -4,8 +4,8 @@ import { Messages } from "./Messages"
 import { user } from "./contracts"
 import { RouteComponentProps } from "@reach/router"
 import { ChannelInfos } from "./ChannelInfos"
-import { db } from "./index"
 import { Members } from "./Members"
+import { Users } from "./useWatchUserAuthStatus"
 
 
 
@@ -21,12 +21,12 @@ export function Channel( { user, channelId }: ChannelProps )
 	const _channel: string = channelId || "general"
 	
 	useEffect( () => {
-		db.doc( `users/${user.uid}` )
-			.set( {
-				joined: {
-					[ _channel ]: true,
-				},
-			} as user, { merge: true } )
+		Users.update( user.uid, {
+			joined: {
+				[ _channel ]: true,
+			},
+		} )
+		
 	}, [ channelId, user.uid ] )
 	
 	return (
