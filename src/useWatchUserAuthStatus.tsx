@@ -30,8 +30,10 @@ export function useWatchUserAuthStatus()
 			
 			Users.update( user.uid, user )
 				.then( () => Users.get( user.uid ) )
-				.then( setUser )
-				.then( watchAndSetOnlineStatus )
+				.then( user => {
+					watchAndSetOnlineStatus( user! )
+					setUser( user )
+				} )
 				.catch( console.error )
 		} ), [] )
 	
@@ -39,9 +41,30 @@ export function useWatchUserAuthStatus()
 }
 
 
-function watchAndSetOnlineStatus()
+function watchAndSetOnlineStatus( user: user )
 {
+	const rtdbRef = rtdb.ref( `status/${user.uid}` )
+	
 	rtdb.ref( ".info/connected" ).on( "value", snapshot => {
-		console.log( snapshot!.val() )
+		if ( disconnected() )
+			return
+		
+		rtdbRef.set( {
+			state:       "online",
+			lastChanged: firebase.database.ServerValue.TIMESTAMP,
+		} )
+		
+		rtdbRef
+			.onDisconnect()
+			.set( {
+				state:       "offline",
+				lastChanged: firebase.database.ServerValue.TIMESTAMP,
+			} )
+		
+		
+		function disconnected()
+		{
+			return !snapshot || snapshot!.val() === false
+		}
 	} )
 }
