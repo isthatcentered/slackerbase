@@ -19,8 +19,12 @@ export interface channel
 
 export interface user extends firebase.UserInfo
 {
-	id:string
+	id: string
 	joined: {
 		[ channel: string ]: boolean
+	}
+	status: {
+		state: "online" | "offline"
+		lastChanged: firebase.firestore.Timestamp
 	}
 }

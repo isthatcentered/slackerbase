@@ -43,28 +43,56 @@ export function useWatchUserAuthStatus()
 
 function watchAndSetOnlineStatus( user: user )
 {
-	const rtdbRef = rtdb.ref( `status/${user.uid}` )
 	
-	rtdb.ref( ".info/connected" ).on( "value", snapshot => {
-		if ( disconnected() )
-			return
-		
-		rtdbRef.set( {
+	rtdb.ref( ".info/connected" )
+		.on( "value", snapshot => {
+			if ( isDisconnected( snapshot ) ) {
+				setFirestoreStatus( "offline" )
+				return
+			}
+			
+			setRTDBStatusConnected()
+			
+			setFirestoreStatus( "online" )
+			
+			updateRTDBStatusOnDisconnect()
+		} )
+	
+	
+	function isDisconnected( snapshot: firebase.database.DataSnapshot | null )
+	{
+		return !snapshot || snapshot!.val() === false
+	}
+	
+	
+	function setRTDBStatusConnected()
+	{
+		rtdb.ref( `status/${user.uid}` ).set( {
 			state:       "online",
 			lastChanged: firebase.database.ServerValue.TIMESTAMP,
 		} )
-		
-		rtdbRef
+	}
+	
+	
+	function updateRTDBStatusOnDisconnect()
+	{
+		rtdb.ref( `status/${user.uid}` )
 			.onDisconnect()
 			.set( {
 				state:       "offline",
 				lastChanged: firebase.database.ServerValue.TIMESTAMP,
 			} )
+	}
+	
+	
+	function setFirestoreStatus( state: user["status"]["state"] )
+	{
+		Users.update( user.uid, {
+			status: {
+				state,
+				lastChanged: firebase.firestore.Timestamp.now(),
+			},
+		} )
 		
-		
-		function disconnected()
-		{
-			return !snapshot || snapshot!.val() === false
-		}
-	} )
+	}
 }
