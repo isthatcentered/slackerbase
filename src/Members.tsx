@@ -37,7 +37,7 @@ function Member( { user }: { user: user } )
 {
 	return (
 		<div className="Member">
-			<div className="MemberStatus offline"/>
+			<div className={`MemberStatus ${user.status.state}`}/>
 			{user.displayName || user.email}
 		</div>)
 }
