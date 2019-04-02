@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Nav } from "./Nav"
 import { Channel } from "./Channel"
-import { db, firebase } from "./index"
-import { user } from "./contracts"
+import { firebase } from "./index"
 import { Redirect, Router } from "@reach/router"
+import { useWatchUserAuthStatus } from "./useWatchUserAuthStatus"
 
 
 
 
 function App()
 {
-	const user = useAuthenticatedWatch()
+	const user = useWatchUserAuthStatus()
 	
 	return user ?
 	       <div className="App">
@@ -55,45 +55,6 @@ function Login()
 			<button onClick={handleSignIn}>Sign in with Google</button>
 		</div>
 	)
-}
-
-
-function useAuthenticatedWatch()
-{
-	const [ user, setUser ] = useState<user | null>( null )
-	
-	useEffect( () => firebase.auth()
-		.onAuthStateChanged( ( fbUser ) => {
-			
-			if ( !fbUser ) {
-				setUser( null )
-				return
-			}
-			
-			const { uid, displayName, email, phoneNumber, photoURL, providerId } = fbUser,
-			      user: user                                                     = {
-				      uid,
-				      displayName,
-				      email,
-				      phoneNumber,
-				      photoURL,
-				      providerId,
-			      } as user
-			
-			db.doc( `users/${user.uid}` )
-				.set( user, { merge: true } )
-				.then( () =>
-					db.doc( `users/${user.uid}` )
-						.get()
-						.then( doc =>
-							setUser( {
-								id: doc.id,
-								...doc.data(),
-							} as any as user ) ) )
-				.catch( console.error )
-		} ), [] )
-	
-	return user
 }
 
 
