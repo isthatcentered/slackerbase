@@ -1,6 +1,7 @@
 import React, { FormEvent } from "react"
 import { db, firebase } from "./index"
 import { message, user } from "./contracts"
+import { Users } from "./useWatchUserAuthStatus"
 
 
 
@@ -31,7 +32,7 @@ export function ChatInputBox( { channel, user }: ChatInputBoxProps )
 		
 		db.collection( `/channels/${channel}/messages` )
 			.add( {
-				user:      db.doc( `users/${user.uid}` ),
+				user:      Users.ref( user.uid ),
 				body:      message,
 				createdAt: firebase.firestore.Timestamp.now(),
 			} as message )

@@ -59,4 +59,10 @@ export class Users
 				} as user :
 				undefined )
 	}
+	
+	
+	static ref( id: string ): firebase.firestore.DocumentReference
+	{
+		return db.doc( `users/${id}` )
+	}
 }
