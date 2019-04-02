@@ -5,7 +5,7 @@ import { user } from "./contracts"
 import { RouteComponentProps } from "@reach/router"
 import { ChannelInfos } from "./ChannelInfos"
 import { Members } from "./Members"
-import { Users } from "./useWatchUserAuthStatus"
+import { Users } from "./Users"
 
 
 

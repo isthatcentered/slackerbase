@@ -1,7 +1,7 @@
 import React, { FormEvent } from "react"
 import { db, firebase } from "./index"
 import { message, user } from "./contracts"
-import { Users } from "./useWatchUserAuthStatus"
+import { Users } from "./Users"
 
 
 
