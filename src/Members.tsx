@@ -10,7 +10,7 @@ export function Members( { channel }: { channel: string } )
 	
 	const members = useCollectionSubscription<user>( `users`, query =>
 		query.where( `joined.${channel}`, "==", true ) )
-		.sort( orderUsersAlphabetically )
+		.sort( Members.orderUsersAlphabetically )
 	
 	return (
 		<div className="Members">
@@ -24,6 +24,15 @@ export function Members( { channel }: { channel: string } )
 }
 
 
+Members.orderUsersAlphabetically = ( a: user, b: user ): number => {
+	return a.displayName! > b.displayName! ?
+	       1 :
+	       a.displayName! < b.displayName! ?
+	       -1 :
+	       0
+}
+
+
 function Member( { user }: { user: user } )
 {
 	return (
@@ -34,11 +43,3 @@ function Member( { user }: { user: user } )
 }
 
 
-function orderUsersAlphabetically( a: user, b: user ): number
-{
-	return a.displayName! > b.displayName! ?
-	       1 :
-	       a.displayName! < b.displayName! ?
-	       -1 :
-	       0
-}
