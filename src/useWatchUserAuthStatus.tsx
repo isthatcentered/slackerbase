@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { user } from "./contracts"
-import { firebase } from "./index"
+import { firebase, rtdb } from "./index"
 import { Users } from "./Users"
 
 
@@ -31,6 +31,7 @@ export function useWatchUserAuthStatus()
 			Users.update( user.uid, user )
 				.then( () => Users.get( user.uid ) )
 				.then( setUser )
+				.then( watchAndSetOnlineStatus )
 				.catch( console.error )
 		} ), [] )
 	
@@ -38,3 +39,9 @@ export function useWatchUserAuthStatus()
 }
 
 
+function watchAndSetOnlineStatus()
+{
+	rtdb.ref( ".info/connected" ).on( "value", snapshot => {
+		console.log( snapshot!.val() )
+	} )
+}
